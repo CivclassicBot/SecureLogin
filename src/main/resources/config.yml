@@ -1,0 +1,8 @@
+deny_message: You were denied access to the server, message modmail if you think this is a mistake.
+save_file_name: prefixes.json
+min_length: 5
+max_length: 8
+#This should be the url that points to your server
+#You'll need to setup a wildcard DNS record for this to work because tokens are generated as *.host
+#Google wildcard DNS with the name of your registrar for more info on setting this up
+hostname: mc.civclassic.com

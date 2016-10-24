@@ -1,0 +1,17 @@
+name: ${project.artifactId}
+main: ${project.groupId}.${project.artifactId}
+version: ${project.version}
+author: biggestnerd
+depend: [ProtocolLib]
+commands:
+  secure:
+    usage: "Usage: /secure [revoke]"
+    description: "Creates a secure login token for your account"
+    permission: securedomain.user
+permissions:
+  securedomain.user:
+    description: "Allows users to create/revoke secure login tokens"
+    default: true
+  securedomain.admin:
+    description: "For admins to lookup/revoke users tokens"
+    default: op
