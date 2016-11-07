@@ -1,0 +1,4 @@
+name: SecureLoginBungee
+main: com.biggestnerd.securelogin.SecureLoginBungee
+version: ${project.version}
+author: biggestnerd
