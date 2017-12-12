@@ -3,8 +3,6 @@ package com.biggestnerd.securelogin;
 import java.util.Random;
 import java.util.UUID;
 
-import org.apache.commons.lang3.RandomStringUtils;
-
 import net.md_5.bungee.api.ChatColor;
 
 public class SecureLoginHelper {
@@ -24,6 +22,7 @@ public class SecureLoginHelper {
 		this.maxLength = maxLength;
 		this.host = host;
 		this.charset = charset.toCharArray();
+		System.out.println(String.format("Generating secure tokens from %d to %d on charset '%s'", minLength, maxLength, charset));
 	}
 
 	public String executeCommand(UUID player, String[] args) {
