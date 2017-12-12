@@ -15,6 +15,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.PendingConnection;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.LoginEvent;
+import net.md_5.bungee.api.event.PreLoginEvent;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -40,12 +41,13 @@ public class SecureLoginBungee extends Plugin implements Listener {
 	}
 	
 	@EventHandler
-	public void onLogin(LoginEvent event) {
+	public void onLogin(PreLoginEvent event) {
 		PendingConnection conn = event.getConnection();
 		String prefix = conn.getVirtualHost().getHostString().split("\\.")[0];
 		UUID id = conn.getUniqueId();
-		event.setCancelReason(new TextComponent(helper.getDenyMessage()));
-		event.setCancelled(helper.getDatabase().shouldDenyAccess(id, prefix));
+		if(helper.getDatabase().shouldDenyAccess(id, prefix)) {
+			conn.disconnect(new TextComponent(helper.getDenyMessage()));
+		}
 	}
 	
 	private Configuration loadConfig() {
