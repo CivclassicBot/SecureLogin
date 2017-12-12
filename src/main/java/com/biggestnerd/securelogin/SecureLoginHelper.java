@@ -15,13 +15,15 @@ public class SecureLoginHelper {
 	private int minLength;
 	private int maxLength;
 	private String host;
+	private char[] charset;
 	
-	public SecureLoginHelper(Database db, String denyMessage, int minLength, int maxLength, String host) {
+	public SecureLoginHelper(Database db, String denyMessage, int minLength, int maxLength, String host, String charset) {
 		this.db = db;
 		this.denyMessage = denyMessage;
 		this.minLength = minLength;
 		this.maxLength = maxLength;
 		this.host = host;
+		this.charset = charset.toCharArray();
 	}
 
 	public String executeCommand(UUID player, String[] args) {
@@ -49,6 +51,11 @@ public class SecureLoginHelper {
 	}
 	
 	private String generateSecureToken() {
-		return RandomStringUtils.randomAlphanumeric(minLength + rng.nextInt(maxLength - minLength + 1));
+		StringBuilder tokenBuilder = new StringBuilder();
+		int length = minLength + rng.nextInt(maxLength - minLength + 1);
+		for(int i = 0; i < length; i++) {
+			tokenBuilder.append(charset[rng.nextInt(charset.length)]);
+		}
+		return tokenBuilder.toString();
 	}
 }

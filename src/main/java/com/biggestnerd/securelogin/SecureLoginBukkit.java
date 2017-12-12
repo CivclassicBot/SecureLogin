@@ -42,8 +42,9 @@ public class SecureLoginBukkit extends JavaPlugin implements Listener, CommandEx
 		int minLength = config.getInt("min_length");
 		int maxLength = Math.min(config.getInt("max_length"), 40);
 		String host = config.getString("hostname");
+		String charset = config.getString("charset");
 		Database db = setupDatabase(config.getConfigurationSection("sql"));
-		helper = new SecureLoginHelper(db, denyMessage, minLength, maxLength, host);
+		helper = new SecureLoginHelper(db, denyMessage, minLength, maxLength, host, charset);
 		if(getServer().getPluginManager().isPluginEnabled(this) && getServer().getPluginManager().isPluginEnabled("ProtocolLib")) {
 			ProtocolLibrary.getProtocolManager().addPacketListener(
 				new PacketAdapter(this, ListenerPriority.HIGHEST, PacketType.Handshake.Client.SET_PROTOCOL) {
