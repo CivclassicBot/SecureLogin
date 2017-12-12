@@ -30,9 +30,9 @@ public class SecureLoginBungee extends Plugin implements Listener {
 	public void onEnable() {
 		Configuration config = loadConfig();
 		Database db = loadDatabase(config.getSection("sql"));
-		String denyMessage = config.getString("denyMessage");
-		int maxLength = config.getInt("maxLength");
-		int minLength = config.getInt("minLength");
+		String denyMessage = config.getString("deny_message");
+		int maxLength = config.getInt("max_length");
+		int minLength = config.getInt("min_length");
 		String host = config.getString("hostname");
 		String charset = config.getString("charset");
 		helper = new SecureLoginHelper(db, denyMessage, minLength, maxLength, host, charset);
