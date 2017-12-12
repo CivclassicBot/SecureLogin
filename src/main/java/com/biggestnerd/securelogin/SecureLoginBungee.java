@@ -8,8 +8,14 @@ import java.sql.SQLException;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.PendingConnection;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.LoginEvent;
+import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
@@ -19,16 +25,17 @@ import net.md_5.bungee.event.EventHandler;
 
 public class SecureLoginBungee extends Plugin implements Listener {
 
-	private Database db;
+	private SecureLoginHelper helper;
 	
 	public void onEnable() {
 		Configuration config = loadConfig();
-		if(config != null) {
-			db = loadDatabase(config.getSection("sql"));
-		}
-		if(db != null) {
-			getProxy().getPluginManager().registerListener(this, this);
-		}
+		Database db = loadDatabase(config.getSection("sql"));
+		String denyMessage = config.getString("denyMessage");
+		int maxLength = config.getInt("maxLength");
+		int minLength = config.getInt("minLength");
+		String host = config.getString("host");
+		helper = new SecureLoginHelper(db, denyMessage, minLength, maxLength, host);
+		getProxy().getPluginManager().registerCommand(this, new SecureCommand());
 	}
 	
 	@EventHandler
@@ -36,7 +43,8 @@ public class SecureLoginBungee extends Plugin implements Listener {
 		PendingConnection conn = event.getConnection();
 		String prefix = conn.getVirtualHost().getHostString().split("\\.")[0];
 		UUID id = conn.getUniqueId();
-		event.setCancelled(db.shouldDenyAccess(id, prefix));
+		event.setCancelReason(new TextComponent(helper.getDenyMessage()));
+		event.setCancelled(helper.getDatabase().shouldDenyAccess(id, prefix));
 	}
 	
 	private Configuration loadConfig() {
@@ -80,5 +88,20 @@ public class SecureLoginBungee extends Plugin implements Listener {
 			return null;
 		}
 		return db;
+	}
+	
+	class SecureCommand extends Command {
+
+		public SecureCommand() {
+			super("secure");
+		}
+		
+		public void execute(CommandSender sender, String[] args) {
+			if(!(sender instanceof ProxiedPlayer)) {
+				sender.sendMessage(new ComponentBuilder("Only players can use /secure!").color(ChatColor.RED).create());
+			} else {
+				sender.sendMessage(new TextComponent(helper.executeCommand(((ProxiedPlayer)sender).getUniqueId(), args)));
+			}
+		}
 	}
 }

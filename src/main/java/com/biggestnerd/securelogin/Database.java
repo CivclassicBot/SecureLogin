@@ -111,6 +111,6 @@ public class Database {
 	 */
 	public boolean shouldDenyAccess(UUID player, String prefix) {
 		String token = getPrefix(player);
-		return token != null && token.equals(prefix);
+		return token != null && !token.equals(prefix);
 	}
 }
