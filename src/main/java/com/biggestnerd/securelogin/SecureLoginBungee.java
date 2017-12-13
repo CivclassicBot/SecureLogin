@@ -42,7 +42,7 @@ public class SecureLoginBungee extends Plugin implements Listener {
 	}
 	
 	@EventHandler
-	public void onLogin(PreLoginEvent event) {
+	public void onLogin(LoginEvent event) {
 		PendingConnection conn = event.getConnection();
 		String prefix = conn.getVirtualHost().getHostString().split("\\.")[0];
 		UUID id = conn.getUniqueId();
