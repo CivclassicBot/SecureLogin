@@ -38,6 +38,7 @@ public class SecureLoginBungee extends Plugin implements Listener {
 		String charset = config.getString("charset");
 		helper = new SecureLoginHelper(db, denyMessage, minLength, maxLength, host, charset);
 		getProxy().getPluginManager().registerCommand(this, new SecureCommand());
+		getProxy().getPluginManager().registerListener(this, this);
 	}
 	
 	@EventHandler
