@@ -45,6 +45,7 @@ public class SecureLoginBungee extends Plugin implements Listener {
 		PendingConnection conn = event.getConnection();
 		String prefix = conn.getVirtualHost().getHostString().split("\\.")[0];
 		UUID id = conn.getUniqueId();
+		System.out.println(String.format("[SecureLogin] prefix: %s, ip: %s, player: %s", prefix, conn.getVirtualHost().getHostString(), id));
 		if(helper.getDatabase().shouldDenyAccess(id, prefix)) {
 			conn.disconnect(new TextComponent(helper.getDenyMessage()));
 		}
